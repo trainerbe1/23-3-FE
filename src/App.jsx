@@ -42,7 +42,7 @@ function App() {
         className={'font-semibold'}
         closeButton={<div className='my-auto mx-3'><FontAwesomeIcon icon={faX} className='text-sm' title='Close' /></div>}
       />
-    
+
       <RouterProvider router={router} />
     </>
   );

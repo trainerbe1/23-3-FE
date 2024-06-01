@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import routes from "./routes";
 import AuthView from "../views/AuthView";
-import Home from "../views/Home";
+import HomeView from "../views/HomeView";
+import ShoppingListView from "../views/ShoppingListView";
 
 const router = createBrowserRouter([
     {
@@ -10,7 +11,11 @@ const router = createBrowserRouter([
     },
     {
         path: routes.home,
-        element: <Home />
+        element: <HomeView />
+    },
+    {
+        path: routes.shoppingList,
+        element: <ShoppingListView />
     },
 ]);
 
