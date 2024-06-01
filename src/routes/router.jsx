@@ -3,6 +3,10 @@ import routes from "./routes";
 import AuthView from "../views/AuthView";
 import HomeView from "../views/HomeView";
 import ShoppingListView from "../views/ShoppingListView";
+import MealPlannerView from "../views/MealPlannerView";
+import FavouritesView from "../views/FavouritesView";
+import RecipesView from "../views/RecipesView";
+import LogoutView from "../views/LogoutView";
 
 const router = createBrowserRouter([
     {
@@ -16,6 +20,22 @@ const router = createBrowserRouter([
     {
         path: routes.shoppingList,
         element: <ShoppingListView />
+    },
+    {
+        path: routes.mealPlanner,
+        element: <MealPlannerView />
+    },
+    {
+        path: routes.recipes,
+        element: <RecipesView />
+    },
+    {
+        path: routes.favourites,
+        element: <FavouritesView />
+    },
+    {
+        path: routes.logout,
+        element: <LogoutView />
     },
 ]);
 
