@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import app from './common/app';
+import { useState } from 'react'
+import 'react-toastify/dist/ReactToastify.css';
 import { RouterProvider } from 'react-router-dom';
 import router from './routes/router';
 import { ToastContainer } from 'react-toastify';
@@ -38,8 +38,8 @@ function App() {
         draggable
         pauseOnHover
         theme="light"
+        toastClassName={'dark:bg-gray-700 bg-white text-white font-semibold'}
         style={{ width: '35%' }}
-        className={'font-semibold'}
         closeButton={<div className='my-auto mx-3'><FontAwesomeIcon icon={faX} className='text-sm' title='Close' /></div>}
       />
 

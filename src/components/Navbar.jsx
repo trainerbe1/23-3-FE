@@ -1,6 +1,7 @@
 import routes from "../routes/routes";
 import Logo from "../assets/png/lunch.png";
 import { useState } from "react";
+import app from "../common/app";
 
 function Navbar() {
   const [username, setUsername] = useState('Yuika');
@@ -18,7 +19,7 @@ function Navbar() {
               </button>
               <a href={routes.home} className="flex ms-2 md:me-24">
                 <img src={Logo} className="h-8 me-3" alt="Logo" />
-                <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Cookbook 2.0</span>
+                <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">{app.name}</span>
               </a>
             </div>
 
