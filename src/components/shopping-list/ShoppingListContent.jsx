@@ -6,6 +6,7 @@ import themes from "../../common/theme";
 import OptionsLogo from "../../assets/svg/options.svg";
 
 function ShoppingListContent() {
+  const [showListInput, setShowListInput] = useState(false);
   const [showShoppingListInput, setShowShoppingListInput] = useState(false);
   const [progress, setProgress] = useState('0');
   const [selectedList, setSelectedList] = useState({
@@ -41,7 +42,7 @@ function ShoppingListContent() {
   }
   
   function selectList(selectedList) {
-    setTodos([
+    const todosList = [
       {
         id: 1,
         isDone: false,
@@ -57,7 +58,9 @@ function ShoppingListContent() {
         isDone: false,
         text: '1 bar chocolate',
       }
-    ]);
+    ]
+    setTodos(todosList);
+    setProgress(calculateCompletionPercentage(todosList));
     setSelectedList(selectedList);
   }
 
@@ -105,6 +108,18 @@ function ShoppingListContent() {
     const completionPercentage = (completedCount / array.length) * 100;
     
     return Math.floor(completionPercentage);
+  }
+
+  function addNewList(e) {
+    e.preventDefault();
+    setList([
+      ...list,
+      {
+        id: list.length + 1,
+        name: e.target.elements[0].value,
+      }
+    ]);
+    setShowListInput(false);
   }
 
   function addShoppingList(e) {
@@ -188,6 +203,16 @@ function ShoppingListContent() {
               </div>
             </div>)
           }
+
+          {
+            showListInput && <form onSubmit={addNewList}>
+              <input required type="text" className={`mt-3 ${themes.textfield}`} autoFocus placeholder="Enter to submit" />
+            </form>
+          }
+          
+          <button onClick={() => setShowListInput(true)} className="mt-3 w-full dark:bg-gray-800 bg-white p-2 rounded hover:bg-gray-700">
+            <FontAwesomeIcon icon={faAdd} title='Add' /> New List
+          </button>
         </div>
       </div>
     </div>
