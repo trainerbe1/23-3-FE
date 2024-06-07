@@ -5,12 +5,32 @@ import app from "../common/app";
 import theme from "../common/theme";
 import { useNavigate } from "react-router-dom";
 import routes from "../routes/routes";
+import { login } from "../services/auth_service";
+import { useRef, useState } from "react";
 
 function AuthView() {
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({
+    username: '',
+    password: ''
+  });
+  const username = useRef('');
+  const password = useRef('');
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
+    setErrors({});
+
+    const user = await login(username.current.value, password.current.value);
+
+    if(user.errors != null) {
+      return setErrors(user.errors);
+    }
+
+    localStorage.setItem('token', user.data.accessToken);
+    localStorage.setItem('refreshToken', user.data.refreshToken);
+    localStorage.setItem('username', user.data.username);
+
     navigate(routes.home);
     toast.success('Login success!');
   }
@@ -20,7 +40,7 @@ function AuthView() {
       <img className="brightness-50 absolute h-screen w-screen z-0" src={BgLogin} alt="" srcSet="" />
       <div className="absolute h-screen w-screen z-0 bg-gray-800 opacity-50"></div>
 
-      <div className="dark:bg-gray-800 bg-white rounded p-5 z-10">
+      <div className="dark:bg-gray-800 bg-white rounded p-5 z-10 w-1/4">
         <div className="mb-10 flex items-center">
           <div>
             <img src={Logo} className="h-8 me-3" alt="Logo"/> 
@@ -32,9 +52,12 @@ function AuthView() {
         <div>
           <div className="text-2xl font-bold mb-6 text-white">Login to continue</div>
           <form onSubmit={onSubmit}>
-            <input required type="text" className={`mb-5 ${theme.textfield}`} placeholder="Username" />
-            <input required type="password" className={`mb-8 ${theme.textfield}`} placeholder="Password" />
-            <button type="submit" className="w-full hover:bg-slate-500 bg-slate-700 py-2 rounded text-white font-semibold">Submit</button>
+            <input required type="text" className={`mb-1 ${theme.textfield}`} placeholder="Username" ref={username} />
+            <small className="text-red-500">{errors.username}</small>
+
+            <input required type="password" className={`mt-5 mb-1 ${theme.textfield}`} placeholder="Password" ref={password} />
+            <small className="text-red-500">{errors.password}</small>
+            <button type="submit" className="w-full mt-8 hover:bg-slate-500 bg-slate-700 py-2 rounded text-white font-semibold">Submit</button>
           </form>
         </div>
       </div>

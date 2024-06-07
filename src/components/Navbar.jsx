@@ -1,10 +1,14 @@
 import routes from "../routes/routes";
 import Logo from "../assets/png/lunch.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import app from "../common/app";
 
 function Navbar() {
-  const [username, setUsername] = useState('Yuika');
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    setUsername(localStorage.getItem('username'));
+  }, []);
 
   return (
     <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
