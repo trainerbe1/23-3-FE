@@ -6,6 +6,7 @@ import ReactModal from "react-modal";
 import RecipeSelector from "../RecipeSelector";
 import { addShoppingList, getShoppingLists, deleteShoppingLists } from "../../services/shopping_list_service";
 import { getShoppingListItems, updateShoppingListItems } from "../../services/shopping_list_item_service";
+import { toast } from "react-toastify";
 
 function ShoppingListContent() {
   const [progress, setProgress] = useState('0');
@@ -64,6 +65,7 @@ function ShoppingListContent() {
 
       return true;
     }));
+    toast.success('Shopping List Deleted');
   }
 
   function calculateCompletionPercentage(array) {
@@ -91,6 +93,7 @@ function ShoppingListContent() {
     closeRecipeSelectorModal();
     const sl = await addShoppingList(r.id);
     setList([...list, sl.data]);
+    toast.success('Shopping List Added');
   }
 
   return (

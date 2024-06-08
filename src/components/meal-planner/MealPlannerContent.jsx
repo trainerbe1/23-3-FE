@@ -53,6 +53,7 @@ function MealPlannerContent() {
     }]);
 
     setMealPlansByDate([...mealPlansByDate, mealPlan.data]);
+    toast.success('Meal Plan Added');
   }
 
   function openModal() {
@@ -69,6 +70,7 @@ function MealPlannerContent() {
     await deleteMealPlan(m.id);
     setMealPlansByDate(mealPlansByDate.filter(meal => m.id != meal.id));
     setMealPlans(mealPlans.filter(meal => m.id != meal.id));
+    toast.success('Meal Plan Deleted');
   }
 
   return (
@@ -121,7 +123,7 @@ function MealPlannerContent() {
                 <div className="mb-3">All planned meals on {selectedDate.dateStr}:</div>
                 <div className="flex flex-wrap">
                   {
-                    mealPlansByDate.map((m, i) => <div key={i} className="w-1/4 text-left pr-5 pb-5">
+                    mealPlansByDate.map((m, i) => <div key={i} className="w-1/4 text-left pr-5 pb-5 h-28">
                       <div className="flex rounded bg-slate-800 cursor-pointer hover:bg-slate-700 p-3 h-24">
                         <div>
                           <img width={70} className="rounded" src={m.recipe.img_url} alt="" srcSet="" />
@@ -142,8 +144,8 @@ function MealPlannerContent() {
                     </div>)
                   }
                   
-                  <button className="w-1/4 pr-5 pb-5" onClick={openModal}>
-                    <div className="h-24 rounded hover:bg-slate-700 border-dashed border bg-slate-800 p-3 h-full flex items-center justify-center">
+                  <button className="w-1/4 pr-5 h-28 pb-5" onClick={openModal}>
+                    <div className="rounded hover:bg-slate-700 border-dashed border bg-slate-800 p-3 h-full flex items-center justify-center">
                       <FontAwesomeIcon icon={faAdd} className='text-sm' title='Add Meal' />&nbsp;&nbsp;New Meal
                     </div>
                   </button>

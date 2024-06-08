@@ -16,18 +16,20 @@ function App() {
 
     if (token != null && (!userInfo && location.pathname.length !== 1 && location.pathname != app.baseUrl)) {
       location.href = '/';
-      } else {
-      const payload = JSON.parse(userInfo);
-
-      if(location.pathname.split('/')[1] === 'admin' && payload.role !== 'ADMIN') {
-        location.href = '/home';
-      } else if(location.pathname.split('/')[1] === '') {
-        if(payload.role === 'USER') {
+    } else {
+      if(userInfo) {
+        const payload = JSON.parse(userInfo);
+        
+        if(location.pathname.split('/')[1] === 'admin' && payload.role !== 'ADMIN') {
           location.href = '/home';
-        } else {
-          location.href = '/admin/home';
-        }
-      } 
+        } else if(location.pathname.split('/')[1] === '') {
+          if(payload.role === 'USER') {
+            location.href = '/home';
+          } else {
+            location.href = '/admin/home';
+          }
+        } 
+      }
       
       setLoading(false);
     }
