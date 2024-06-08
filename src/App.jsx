@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import 'react-toastify/dist/ReactToastify.css';
 import { RouterProvider } from 'react-router-dom';
 import router from './routes/router';
@@ -9,21 +9,20 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 function App() {
   const [loading, setLoading] = useState(true);
 
-  // TODO IMPLEMENT LOGIN
-  // useEffect(() => {
-  //   const userInfo = localStorage.getItem('info');
-  //   const token = localStorage.getItem('accessToken');
+  useEffect(() => {
+    const userInfo = localStorage.getItem('info');
+    const token = localStorage.getItem('accessToken');
 
-  //   if (token != null && (!userInfo && location.pathname.length !== 1 && location.pathname != app.baseUrl)) {
-  //     location.href = app.baseUrl;
-  //   } else {
-  //     setLoading(false);
-  //   }
-  // }, []);
+    if (token != null && (!userInfo && location.pathname.length !== 1 && location.pathname != app.baseUrl)) {
+      location.href = app.baseUrl;
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
-  // if (loading) {
-  //   return null;
-  // }
+  if (loading) {
+    return null;
+  }
 
   return (
     <>

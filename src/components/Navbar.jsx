@@ -2,12 +2,19 @@ import routes from "../routes/routes";
 import Logo from "../assets/png/lunch.png";
 import { useEffect, useState } from "react";
 import app from "../common/app";
+import clearData from "../utils/clear_data";
 
 function Navbar() {
   const [username, setUsername] = useState('');
 
   useEffect(() => {
-    setUsername(localStorage.getItem('username'));
+    const info = JSON.parse(localStorage.getItem('info'));
+
+    if(info == null) {
+      return clearData();
+    }
+    
+    setUsername(info.username);
   }, []);
 
   return (

@@ -1,6 +1,7 @@
 import axios from "axios";
-import apiMessage from "../common/api_message";
-import refreshToken from "../services/auth_service";
+import apiMessage from "./api_message";
+import { refreshToken } from "../services/auth_service";
+import clearData from "../utils/clear_data";
 
 const axiosClient = axios.create();
 
@@ -19,14 +20,12 @@ axiosClient.interceptors.request.use(
 
 axiosClient.interceptors.response.use(
     async function (response) {
-      const res = response.data;
-      
-      if(res.message === apiMessage.tokenExpired) {
+      if(response.data.message === apiMessage.tokenExpired) {
         await refreshAccessToken();
         return axiosClient.request(response.config);
-      } else {
-        return Promise.reject(error);
       }
+
+      return response;
     },
     function (error) {
       return Promise.reject(error);
@@ -39,8 +38,10 @@ const refreshAccessToken = async (res) => {
       localStorage.setItem('token', tokens.data.accessToken);
       localStorage.setItem('refreshToken', tokens.data.refreshToken);
     } catch (error) {
-        localStorage.clear();
-        location.href = '/';
-        Promise.reject(error);
+      console.error(error);
+      // clearData();
+      Promise.reject(error);
     }
 }
+
+export default axiosClient;

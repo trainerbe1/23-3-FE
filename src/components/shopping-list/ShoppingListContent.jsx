@@ -1,36 +1,33 @@
 import { faAdd, faLongArrowAltRight, faTrashAlt, faX } from "@fortawesome/free-solid-svg-icons";
-import { faEllipsisV } from "@fortawesome/free-solid-svg-icons/faEllipsisV";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import themes from "../../common/theme";
+import { useEffect, useState } from "react";
 import OptionsLogo from "../../assets/svg/options.svg";
+import ReactModal from "react-modal";
+import RecipeSelector from "../RecipeSelector";
+import { addShoppingList, getShoppingLists, deleteShoppingLists } from "../../services/shopping_list_service";
+import { getShoppingListItems } from "../../services/shopping_list_item_service";
 
 function ShoppingListContent() {
   const [showListInput, setShowListInput] = useState(false);
   const [showShoppingListInput, setShowShoppingListInput] = useState(false);
   const [progress, setProgress] = useState('0');
+  const [openRecipeSelectorModal, setRecipeSelectorModal] = useState(false);
   const [selectedList, setSelectedList] = useState({
     name: 'Shopping List'
   });
-
-  const [list, setList] = useState([
-    {
-      id: 1,
-      name: 'Pizza Pepperoni',
-    },
-    {
-      id: 2,
-      name: 'AK 47',
-    }
-  ]);
+  const [list, setList] = useState([]);
   const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    getShoppingListData();
+  }, []);
 
   function check(selectedTodo) {
     const updatedTodos = todos.map((t) => {
       if(t.id === selectedTodo.id) {
         return {
           ...t,
-          isDone: !selectedTodo.isDone
+          is_done: !selectedTodo.is_done
         }
       }
 
@@ -41,30 +38,14 @@ function ShoppingListContent() {
     setTodos(updatedTodos);
   }
   
-  function selectList(selectedList) {
-    const todosList = [
-      {
-        id: 1,
-        isDone: false,
-        text: '1 gr cocaine',
-      },
-      {
-        id: 2,
-        isDone: false,
-        text: '1 gr sugar',
-      },
-      {
-        id: 3,
-        isDone: false,
-        text: '1 bar chocolate',
-      }
-    ]
-    setTodos(todosList);
-    setProgress(calculateCompletionPercentage(todosList));
+  async function selectList(selectedList) {
+    const data = await getShoppingListItems(selectedList.id);
+    setTodos(data.data);
+    setProgress(calculateCompletionPercentage(data.data));
     setSelectedList(selectedList);
   }
 
-  function deleteList(e, selectedL) {
+  async function deleteList(e, selectedL) {
     e.stopPropagation();
 
     if(selectedList.id == selectedL.id) {
@@ -72,15 +53,15 @@ function ShoppingListContent() {
       setSelectedList({});
     }
 
-    const updatedList = list.filter((l) => {
+    await deleteShoppingLists(selectedL.id);
+
+    setList(list.filter((l) => {
       if(l.id === selectedL.id) {
         return false
       }
 
       return true;
-    });
-
-    setList(updatedList);
+    }));
   }
   
   function deleteTodo(e, selectedTodo) {
@@ -102,7 +83,7 @@ function ShoppingListContent() {
     if (array.length === 0) return 0;
 
     const completedCount = array.reduce((count, obj) => {
-        return count + (obj.isDone ? 1 : 0);
+        return count + (obj.is_done ? 1 : 0);
     }, 0);
 
     const completionPercentage = (completedCount / array.length) * 100;
@@ -110,33 +91,50 @@ function ShoppingListContent() {
     return Math.floor(completionPercentage);
   }
 
-  function addNewList(e) {
-    e.preventDefault();
-    setList([
-      ...list,
-      {
-        id: list.length + 1,
-        name: e.target.elements[0].value,
-      }
-    ]);
-    setShowListInput(false);
+  async function getShoppingListData() {
+    const data = await getShoppingLists();
+    setList(data.data);
   }
 
-  function addShoppingList(e) {
-    e.preventDefault();
-    setTodos([
-      ...todos,
-      {
-        id: todos.length + 1,
-        isDone: false,
-        text: e.target.elements[0].value,
-      }
-    ]);
-    setShowShoppingListInput(false);
+  function closeRecipeSelectorModal() {
+    setRecipeSelectorModal(false);
+  }
+
+  async function selectRecipe(r) {
+    closeRecipeSelectorModal();
+    const sl = await addShoppingList(r.id);
+    setList([...list, sl.data]);
   }
 
   return (
     <div className="flex flex-wrap">
+
+      <ReactModal
+        isOpen={openRecipeSelectorModal}
+        onRequestClose={closeRecipeSelectorModal}
+        style={{
+          overlay: {
+            background: "rgba(33, 35, 47, 0.7)",
+          },
+          content: {
+            borderRadius: '10px',
+            border: 0,
+            width: '700px',
+            background: '#1f2937',
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            boxShadow: 'var(0 0 #0000, 0 0 #0000), var(0 0 #0000, 0 0 #0000), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+            transform: 'translate(-50%, -50%)',
+          }
+        }}
+        contentLabel="Example Modal"
+      >
+        <RecipeSelector selectHandler={selectRecipe} />
+      </ReactModal>
+
       <div className="w-2/3">
         <div className="p-3 dark:bg-gray-800 bg-white shadow-lg text-center text-white font-semibold sticky">
           {
@@ -159,28 +157,15 @@ function ShoppingListContent() {
               {
                 todos.map((t, i) => <div key={i} onClick={() => check(t)} className="cursor-pointer flex w-full text-left hover:bg-gray-700 p-2 rounded">
                   <div>
-                    <input readOnly type="checkbox" checked={t.isDone} name="" id="" />
+                    <input readOnly type="checkbox" checked={t.is_done} name="" id="" />
                   </div>
                   <div>&nbsp;&nbsp;</div>
-                  <div className={`${t.isDone ? 'line-through' : ''} flex-grow`}>
-                    {t.text}
+                  <div className={`${t.is_done ? 'line-through' : ''} flex-grow`}>
+                    {t.name}
                   </div>
-                  <button onClick={(e) => deleteTodo(e, t)} className="p-.5 px-1.5 hover:bg-gray-600 rounded">
-                    <FontAwesomeIcon icon={faX} className='text-xs' title='Delete' />
-                  </button>
                 </div>
                 )
               }
-    
-              {
-                showShoppingListInput && <form onSubmit={addShoppingList}>
-                  <input required type="text" className={`mt-3 ${themes.textfield}`} autoFocus placeholder="Enter to submit" />
-                </form>
-              }
-              
-              <button onClick={() => setShowShoppingListInput(true)} className="mt-3 w-full dark:bg-gray-800 bg-white p-2 rounded hover:bg-gray-700">
-                <FontAwesomeIcon icon={faAdd} title='Add' /> Add Shopping List
-              </button>
             </div>
         }
         
@@ -203,14 +188,8 @@ function ShoppingListContent() {
               </div>
             </div>)
           }
-
-          {
-            showListInput && <form onSubmit={addNewList}>
-              <input required type="text" className={`mt-3 ${themes.textfield}`} autoFocus placeholder="Enter to submit" />
-            </form>
-          }
           
-          <button onClick={() => setShowListInput(true)} className="mt-3 w-full dark:bg-gray-800 bg-white p-2 rounded hover:bg-gray-700">
+          <button onClick={() => setRecipeSelectorModal(true)} className="mt-3 w-full dark:bg-gray-800 bg-white p-2 rounded hover:bg-gray-700">
             <FontAwesomeIcon icon={faAdd} title='Add' /> New List
           </button>
         </div>
