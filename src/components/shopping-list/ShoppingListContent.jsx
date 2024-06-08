@@ -5,11 +5,9 @@ import OptionsLogo from "../../assets/svg/options.svg";
 import ReactModal from "react-modal";
 import RecipeSelector from "../RecipeSelector";
 import { addShoppingList, getShoppingLists, deleteShoppingLists } from "../../services/shopping_list_service";
-import { getShoppingListItems } from "../../services/shopping_list_item_service";
+import { getShoppingListItems, updateShoppingListItems } from "../../services/shopping_list_item_service";
 
 function ShoppingListContent() {
-  const [showListInput, setShowListInput] = useState(false);
-  const [showShoppingListInput, setShowShoppingListInput] = useState(false);
   const [progress, setProgress] = useState('0');
   const [openRecipeSelectorModal, setRecipeSelectorModal] = useState(false);
   const [selectedList, setSelectedList] = useState({
@@ -22,12 +20,16 @@ function ShoppingListContent() {
     getShoppingListData();
   }, []);
 
-  function check(selectedTodo) {
+  async function check(selectedTodo) {
+    const updateItem = await updateShoppingListItems(selectedTodo.id, {
+      isDone: !selectedTodo.is_done
+    });
+
     const updatedTodos = todos.map((t) => {
       if(t.id === selectedTodo.id) {
         return {
           ...t,
-          is_done: !selectedTodo.is_done
+          is_done: updateItem.data.is_done
         }
       }
 
@@ -62,21 +64,6 @@ function ShoppingListContent() {
 
       return true;
     }));
-  }
-  
-  function deleteTodo(e, selectedTodo) {
-    e.stopPropagation();
-
-    const updatedTodos = todos.filter((t) => {
-      if(t.id === selectedTodo.id) {
-        return false
-      }
-
-      return true;
-    });
-
-    setProgress(calculateCompletionPercentage(updatedTodos));
-    setTodos(updatedTodos);
   }
 
   function calculateCompletionPercentage(array) {

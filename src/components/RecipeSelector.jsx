@@ -1,32 +1,61 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import themes from "../common/theme";
 import { getRecipes } from "../services/recipe_service";
 
 export default function RecipeSelector({
     selectHandler
 }) {
+    const [inputValue, setInputValue] = useState("");
+    const allRecipes = useRef([]);
     const [recipes, setRecipes] = useState([]);
-    const [selectedRecipe, setSelectedRecipe] = useState({});
 
     useEffect(() => {
         getRecipesData();
     }, []);
 
     async function getRecipesData() {
-        const recipeData = await getRecipes();
+        const recipeData = await getRecipes(1, 1000);
         setRecipes(recipeData.data.data);
+        allRecipes.current = recipeData.data.data;
     }
 
     function selectRecipe(r) {
-        setSelectedRecipe(r);
         selectHandler(r);
     }
 
+    function useDebounce(effect, dependencies, delay) {
+        const callback = useCallback(effect, dependencies);
+    
+        useEffect(() => {
+          const timeout = setTimeout(callback, delay);
+          return () => clearTimeout(timeout);
+        }, [callback, delay]);
+    }
+
+    useDebounce(
+        async () => {
+          try {
+            if(inputValue.length === 0) {
+                return setRecipes(allRecipes.current);
+            }
+            
+            setRecipes(allRecipes.current.filter(r => r.name.toLowerCase().includes(inputValue.toLowerCase())));
+          } catch (error) {
+            console.error(error);
+          }
+        },
+        [inputValue],
+        500
+    );
+
     return(
         <div>
-            <input type="text" className={themes.textfield} placeholder="Find recipe" />
+            <div className="text-slate-400 mb-4 text-2xl">
+                Select a Recipe
+            </div>
+            <input onChange={(e) => setInputValue(e.target.value)} type="text" className={`mb-4 ${themes.textfield}`} placeholder="Find recipe" />
 
-            <div className="h-96">
+            <div style={{height: '65vh'}} className="overflow-auto">
                 {
                     recipes.map((r, i) => <div key={i} onClick={() => selectRecipe(r)} className="hover:bg-slate-700 flex p-1 rounded cursor-pointer">
                         <div className="p-2">
