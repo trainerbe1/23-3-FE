@@ -7,6 +7,9 @@ import MealPlannerView from "../views/MealPlannerView";
 import FavouritesView from "../views/FavouritesView";
 import RecipesView from "../views/RecipesView";
 import LogoutView from "../views/LogoutView";
+import RecipeManagementView from "../views/RecipeManagementView";
+import UserManagementView from "../views/UserManagementView";
+import AdminHomeView from "../views/AdminHomeView";
 
 const router = createBrowserRouter([
     {
@@ -33,6 +36,22 @@ const router = createBrowserRouter([
         path: routes.favourites,
         element: <FavouritesView />
     },
+
+    {
+        path: routes.adminHome,
+        element: <AdminHomeView />,
+        children: [
+            {
+                path: routes.userManagement,
+                element: <UserManagementView />
+            },
+            {
+                path: routes.recipeManagement,
+                element: <RecipeManagementView />
+            },
+        ]
+    },
+
     {
         path: routes.logout,
         element: <LogoutView />

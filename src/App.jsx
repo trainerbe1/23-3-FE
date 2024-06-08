@@ -5,6 +5,7 @@ import router from './routes/router';
 import { ToastContainer } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faX } from '@fortawesome/free-solid-svg-icons';
+import app from './common/app';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -14,13 +15,25 @@ function App() {
     const token = localStorage.getItem('accessToken');
 
     if (token != null && (!userInfo && location.pathname.length !== 1 && location.pathname != app.baseUrl)) {
-      location.href = app.baseUrl;
-    } else {
+      location.href = '/';
+      } else {
+      const payload = JSON.parse(userInfo);
+
+      if(location.pathname.split('/')[1] === 'admin' && payload.role !== 'ADMIN') {
+        location.href = '/home';
+      } else if(location.pathname.split('/')[1] === '') {
+        if(payload.role === 'USER') {
+          location.href = '/home';
+        } else {
+          location.href = '/admin/home';
+        }
+      } 
+      
       setLoading(false);
     }
   }, []);
 
-  if (loading) {
+  if(loading) {
     return null;
   }
 

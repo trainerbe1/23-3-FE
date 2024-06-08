@@ -4,6 +4,7 @@ import successLottie from "../assets/lottie/success.json";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import routes from "../routes/routes";
+import clearData from "../utils/clear_data";
 
 function LogoutView() {
   const [loggedOut, setLoggedOut] = useState(false);
@@ -14,6 +15,7 @@ function LogoutView() {
       setLoggedOut(true);
 
       setTimeout(() => {
+        clearData();
         navigate('/');
       }, 1500);
     }, 2000);
@@ -36,7 +38,6 @@ function LogoutView() {
             ? <>Success!</>
             : <>Wait, logout in process...</>
         }
-        
       </div>
     </div>
   );

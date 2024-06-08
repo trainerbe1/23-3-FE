@@ -8,6 +8,10 @@ const routes = {
     favourites: "/favourites",
     recipes: "/recipes",
     
+    adminHome: "/admin",
+    userManagement: "/admin/user",
+    recipeManagement: "/admin/recipe",
+
     logout: "/logout",
 };
 
