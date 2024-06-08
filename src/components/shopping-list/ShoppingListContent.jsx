@@ -95,7 +95,6 @@ function ShoppingListContent() {
 
   return (
     <div className="flex flex-wrap">
-
       <ReactModal
         isOpen={openRecipeSelectorModal}
         onRequestClose={closeRecipeSelectorModal}
