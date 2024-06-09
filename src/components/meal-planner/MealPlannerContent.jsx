@@ -9,6 +9,7 @@ import RecipeSelector from "../RecipeSelector";
 import { addMealPlan, deleteMealPlan, getMealPlans, getMealPlansByDate } from "../../services/meal_planner_service";
 import { toast } from "react-toastify";
 import DatePicker from "../../assets/svg/date_picker.svg";
+import themes from "../../common/theme";
 
 function MealPlannerContent() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -78,23 +79,7 @@ function MealPlannerContent() {
       <ReactModal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        style={{
-          overlay: {
-            background: "rgba(33, 35, 47, 0.7)",
-          },
-          content: {
-            border: 0,
-            width: '700px',
-            background: '#1f2937',
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            boxShadow: 'var(0 0 #0000, 0 0 #0000), var(0 0 #0000, 0 0 #0000), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-            transform: 'translate(-50%, -50%)',
-          }
-        }}
+        style={themes.modalStyle}
         contentLabel="Example Modal"
       >
         <RecipeSelector selectHandler={selectRecipe} />
@@ -120,7 +105,7 @@ function MealPlannerContent() {
           {
             selectedDate != null
               ? <>
-                <div className="mb-3">All planned meals on {selectedDate.dateStr}:</div>
+                <div className="mb-3">All planned meals on <span className="text-white">{selectedDate.dateStr}:</span></div>
                 <div className="flex flex-wrap">
                   {
                     mealPlansByDate.map((m, i) => <div key={i} className="w-1/4 text-left pr-5 pb-5 h-28">

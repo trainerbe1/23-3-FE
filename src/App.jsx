@@ -26,7 +26,7 @@ function App() {
           if(payload.role === 'USER') {
             location.href = '/home';
           } else {
-            location.href = '/admin/home';
+            location.href = '/user-management';
           }
         } 
       }

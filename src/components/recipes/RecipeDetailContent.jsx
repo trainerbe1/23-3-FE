@@ -86,7 +86,7 @@ function RecipeDetailContent() {
             <FontAwesomeIcon width={15} icon={faHand} /> {recipe.instructions.split('\n').length} Steps
           </div>
           <div className='mt-3'>
-            <FontAwesomeIcon width={15} icon={faCarrot} /> {recipe.ingredient.split('|').length} Ingredients
+            <FontAwesomeIcon width={15} icon={faCarrot} /> {recipe.ingredient.split('\n').length} Ingredients
           </div>
           <div className='mt-3'>
             <FontAwesomeIcon width={15} icon={faLayerGroup} /> {recipe.category.name}
@@ -112,7 +112,7 @@ function RecipeDetailContent() {
           <div className='px-5'>
             <ol className='list-decimal'>
               {
-                recipe.ingredient.split('|').map((i, idx) => <li className='mb-3' key={idx}>{i}</li>)
+                recipe.ingredient.split('\n').map((i, idx) => <li className='mb-3' key={idx}>{i}</li>)
               }
             </ol>
           </div>

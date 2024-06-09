@@ -1,12 +1,16 @@
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getUsers } from '../../../services/user_service';
-import { useEffect, useState } from "react";
+import { deleteUser, getUsers } from '../../../services/user_service';
+import { useEffect, useRef, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { DateTime } from "luxon";
+import { toast } from "react-toastify";
+import ReactModal from 'react-modal';
+import themes from '../../../common/theme';
+import Confirm from '../../Confirm';
 
 function UserManagementContent() {
+  const [openModal, setOpenModal] = useState(false);
   const [users, setUsers] = useState([]);
+  const selectedUser = useRef({});
   const [totalPage, setTotalPage] = useState(0);
 
   useEffect(() => {
@@ -23,8 +27,26 @@ function UserManagementContent() {
     setTotalPage(data.data.totalPages);
   }
 
+  async function deleteUserHandler() {
+    await deleteUser(selectedUser.current.id);
+    getUsersData();
+    toast.success('User deleted successfully');
+  }
+
+  async function confirmDelete(u) {
+    setOpenModal(true);
+    selectedUser.current = u;
+  }
+
   return (
     <div>
+      <ReactModal 
+        isOpen={openModal}
+        style={themes.modalStyle}
+        contentLabel="Example Modal"
+      >
+        <Confirm title={'Delete this user?'} confirmHandler={() => deleteUserHandler()} />
+      </ReactModal>
       <div className="p-3 dark:bg-gray-800 bg-white shadow-lg text-center text-white font-semibold sticky">
         Users Management
       </div>
@@ -80,7 +102,9 @@ function UserManagementContent() {
                             {u.shopping_lists.length}
                           </td>
                           <td className="px-6 py-4">
-                            <FontAwesomeIcon icon={faTrashAlt} className="text-red-500" />
+                            <button type="button" onClick={() => confirmDelete(u)} className="text-blue-400 hover:text-blue-600">
+                              Delete
+                            </button>
                           </td>
                       </tr>
                     )
