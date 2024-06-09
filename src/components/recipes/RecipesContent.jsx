@@ -5,6 +5,7 @@ import { faLayerGroup, faMapMarkerAlt, faTags } from '@fortawesome/free-solid-sv
 import { useCallback, useEffect, useState } from 'react';
 import { getRecipes, getRecipesByName } from "../../services/recipe_service";
 import EmptyCart from "../../assets/svg/empty_cart.svg";
+import routes from '../../routes/routes';
 
 function RecipesContent() {
   const [recipes, setRecipes] = useState([]);
@@ -68,7 +69,7 @@ function RecipesContent() {
         <div className='flex flex-wrap mt-4'>
           {
             recipes.map((r, i) => 
-              <div key={i} className="w-1/3 p-2">
+              <a href={routes.recipeDetail(r.id)} key={i} className="w-1/3 p-2">
                 <div className='rounded border cursor-pointer p-2 flex hover:bg-slate-800 text-left'>
                   <div>
                     <img width={150} className='rounded' src={r.img_url} alt="" />
@@ -88,11 +89,11 @@ function RecipesContent() {
                     </div>
                     
                     <div className='mt-1 text-sm'>
-                      <FontAwesomeIcon width={15} icon={faTags} /> {r.tags}
+                      <FontAwesomeIcon width={15} icon={faTags} /> {r.tags ?? '-'}
                     </div>
                 </div>
                 </div>
-              </div>
+              </a>
             )
           }
         </div>

@@ -13,3 +13,7 @@ export async function getRecipes(page, pageSize) {
 export async function getRecipesByName(name) {
     return (await axiosClient.get(`${app.apiUrl}/v1/recipes/name/${name}`)).data;
 }
+
+export async function getRecipeById(id) {
+    return (await axiosClient.get(`${app.apiUrl}/v1/recipes/${id}`)).data;
+}

@@ -10,6 +10,7 @@ import LogoutView from "../views/LogoutView";
 import RecipeManagementView from "../views/RecipeManagementView";
 import UserManagementView from "../views/UserManagementView";
 import AdminHomeView from "../views/AdminHomeView";
+import RecipeDetailView from "../views/RecipeDetailView";
 
 const router = createBrowserRouter([
     {
@@ -30,7 +31,11 @@ const router = createBrowserRouter([
     },
     {
         path: routes.recipes,
-        element: <RecipesView />
+        element: <RecipesView />,
+    },
+    {
+        path: routes.recipeDetail(),
+        element: <RecipeDetailView />
     },
     {
         path: routes.favourites,

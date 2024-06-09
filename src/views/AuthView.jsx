@@ -29,7 +29,7 @@ function AuthView() {
 
     localStorage.setItem('token', user.data.accessToken);
     localStorage.setItem('refreshToken', user.data.refreshToken);
-    localStorage.setItem('info', JSON.stringify({username: user.data.username, role: user.data.role}));
+    localStorage.setItem('info', JSON.stringify({username: user.data.username, role: user.data.role, id: user.data.id}));
 
     navigate(routes.home);
     toast.success('Login success!');

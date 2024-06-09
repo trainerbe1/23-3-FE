@@ -7,6 +7,9 @@ const routes = {
     mealPlanner: "/meal-planner",
     favourites: "/favourites",
     recipes: "/recipes",
+    recipeDetail(id = null) {
+        return `/recipes/${id ?? ':id'}`
+    },
     
     adminHome: "/admin",
     userManagement: "/admin/user",
