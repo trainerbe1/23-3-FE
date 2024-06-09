@@ -31,8 +31,13 @@ function AuthView() {
     localStorage.setItem('refreshToken', user.data.refreshToken);
     localStorage.setItem('info', JSON.stringify({username: user.data.username, role: user.data.role, id: user.data.id}));
 
-    navigate(routes.home);
     toast.success('Login success!');
+
+    if(user.data.role == 'ADMIN') {
+      navigate(routes.recipeManagement);
+    } else {
+      navigate(routes.home);
+    }
   }
 
   return (

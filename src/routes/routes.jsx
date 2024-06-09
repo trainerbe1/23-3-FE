@@ -11,9 +11,8 @@ const routes = {
         return `/recipes/${id ?? ':id'}`
     },
     
-    adminHome: "/admin",
-    userManagement: "/admin/user",
-    recipeManagement: "/admin/recipe",
+    userManagement: "/user-management",
+    recipeManagement: "/recipe-management",
 
     logout: "/logout",
 };
