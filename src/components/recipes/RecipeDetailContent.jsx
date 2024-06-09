@@ -60,7 +60,7 @@ function RecipeDetailContent() {
   return (
     <div>
       <div className="p-3 flex dark:bg-gray-800 bg-white shadow-lg text-center text-white font-semibold sticky">
-        <div className='w-28 px-3 text-left'><a href={routes.recipes}><FontAwesomeIcon width={15} icon={faLongArrowAltLeft} />&nbsp;&nbsp;Back</a></div>
+        <div className='w-28 px-3 text-left'><button onClick={() => history.back()} type='button'><FontAwesomeIcon width={15} icon={faLongArrowAltLeft} />&nbsp;&nbsp;Back</button></div>
         <div className='w-full'>
           How to make {recipe.name ?? 'Loading...'}&emsp;
           <button type='button' onClick={setToFavourite}>

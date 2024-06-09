@@ -39,8 +39,7 @@ const refreshAccessToken = async (res) => {
       localStorage.setItem('refreshToken', tokens.data.refreshToken);
     } catch (error) {
       console.error(error);
-      // clearData();
-      Promise.reject(error);
+      await clearData();
     }
 }
 

@@ -1,13 +1,14 @@
 import ReactPaginate from 'react-paginate';
 import themes from '../../common/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLayerGroup, faMapMarkerAlt, faTags } from '@fortawesome/free-solid-svg-icons';
-import { useCallback, useEffect, useState } from 'react';
+import { faHeart, faLayerGroup, faMapMarkerAlt, faTags } from '@fortawesome/free-solid-svg-icons';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { getRecipes, getRecipesByName } from "../../services/recipe_service";
 import EmptyCart from "../../assets/svg/empty_cart.svg";
 import routes from '../../routes/routes';
 
 function RecipesContent() {
+  const userId = useRef(JSON.parse(localStorage.getItem('info')).id);
   const [recipes, setRecipes] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
   const [inputValue, setInputValue] = useState("");
@@ -77,7 +78,10 @@ function RecipesContent() {
 
                   <div className='w-full ml-4'>
                     <div className='font-bold text-white text-2xl'>
-                      {r.name}
+                      {r.name}&nbsp;&nbsp;
+                      {
+                        r.favourites.some(f => f.user_id == userId.current) && <FontAwesomeIcon width={20} icon={faHeart} />
+                      }
                     </div>
 
                     <div className='mt-3 text-sm'>

@@ -21,5 +21,5 @@ export async function register(username, password, repeatPassword) {
 }
 
 export async function logout() {
-    return (await axios.delete(`${app.apiUrl}/v1/auth/refresh/${localStorage.getItem('refreshToken')}`)).data;
+    return (await axios.delete(`${app.apiUrl}/v1/auth/logout/${localStorage.getItem('refreshToken')}`)).data;
 }
