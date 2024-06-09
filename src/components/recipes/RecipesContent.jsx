@@ -3,23 +3,32 @@ import themes from '../../common/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faLayerGroup, faMapMarkerAlt, faTags } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { getRecipes, getRecipesByName } from "../../services/recipe_service";
+import { getRecipes, getRecipesByCategoryId, getRecipesByName } from "../../services/recipe_service";
+import { getCategories } from "../../services/category_service";
 import EmptyCart from "../../assets/svg/empty_cart.svg";
 import routes from '../../routes/routes';
 
 function RecipesContent() {
   const userId = useRef(JSON.parse(localStorage.getItem('info')).id);
+  const [categories, setCategories] = useState([]);
   const [recipes, setRecipes] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState({});
   const [totalPage, setTotalPage] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [searchMode, setSearchMode] = useState(false);
 
   useEffect(() => {
     getRecipeData();
+    getCategoryData();
   }, []);
 
   function handlePageClick(e) {
     getRecipeData(e.selected + 1);
+  }
+
+  async function getCategoryData() {
+    const data = await getCategories();
+    setCategories(data.data);
   }
 
   async function getRecipeData(page = 1) {
@@ -57,6 +66,19 @@ function RecipesContent() {
     500
   );
 
+  async function filterByCategory(c) {
+    if(c.id == selectedCategory.id) {
+      getRecipeData();
+      setSearchMode(false);
+      setSelectedCategory({});
+    } else {
+      const data = await getRecipesByCategoryId(c.id);
+      setSelectedCategory(c);
+      setRecipes(data.data);
+      setSearchMode(true);
+    }
+  }
+
   return (
     <div>
       <div className="p-3 dark:bg-gray-800 bg-white shadow-lg text-center text-white font-semibold sticky">
@@ -64,8 +86,17 @@ function RecipesContent() {
       </div>
 
       <div className='p-4'>
-
         <input onChange={(e) => setInputValue(e.target.value)}  type="text" className={`${themes.textfield} mt-5`} placeholder='Whats your craving?' />
+        
+        <div className='my-2 overflow-auto w-full'>
+          {
+            categories.map((c, i) => <button onClick={() => filterByCategory(c)} key={i} className={`text-left text-sm border px-2 py-1 hover:bg-slate-700 mx-2 rounded-lg ${selectedCategory.id == c.id ? 'bg-slate-600' : 'bg-slate-800'}`} type='button'>
+              <FontAwesomeIcon icon={faLayerGroup} width={20} />&nbsp;
+              {c.name}&nbsp;&nbsp;
+              {c.recipes.length}
+            </button>)
+          }
+        </div>
         
         <div className='flex flex-wrap mt-4'>
           {

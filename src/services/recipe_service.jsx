@@ -17,3 +17,7 @@ export async function getRecipesByName(name) {
 export async function getRecipeById(id) {
     return (await axiosClient.get(`${app.apiUrl}/v1/recipes/${id}`)).data;
 }
+
+export async function getRecipesByCategoryId(id) {
+    return (await axiosClient.get(`${app.apiUrl}/v1/recipes/categories/${id}`)).data;
+}
