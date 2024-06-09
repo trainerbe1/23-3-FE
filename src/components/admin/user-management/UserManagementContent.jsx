@@ -30,6 +30,7 @@ function UserManagementContent() {
   async function deleteUserHandler() {
     await deleteUser(selectedUser.current.id);
     getUsersData();
+    closeModal();
     toast.success('User deleted successfully');
   }
 
@@ -38,14 +39,19 @@ function UserManagementContent() {
     selectedUser.current = u;
   }
 
+  function closeModal() {
+    setOpenModal(false);
+  }
+
   return (
     <div>
       <ReactModal 
         isOpen={openModal}
         style={themes.modalStyle}
+        onRequestClose={closeModal}
         contentLabel="Example Modal"
       >
-        <Confirm title={'Delete this user?'} confirmHandler={() => deleteUserHandler()} />
+        <Confirm title={'Delete this user?'} cancelHandler={closeModal} confirmHandler={() => deleteUserHandler()} />
       </ReactModal>
       <div className="p-3 dark:bg-gray-800 bg-white shadow-lg text-center text-white font-semibold sticky">
         Users Management

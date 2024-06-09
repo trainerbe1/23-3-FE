@@ -14,6 +14,14 @@ export async function getRecipesByName(name) {
     return (await axiosClient.get(`${app.apiUrl}/v1/recipes/name/${name}`)).data;
 }
 
+export async function addRecipe(body) {
+    return (await axiosClient.post(`${app.apiUrl}/v1/recipes`, body)).data;
+}
+
+export async function deleteRecipeById(id) {
+    return (await axiosClient.delete(`${app.apiUrl}/v1/recipes/${id}`)).data;
+}
+
 export async function getRecipeById(id) {
     return (await axiosClient.get(`${app.apiUrl}/v1/recipes/${id}`)).data;
 }

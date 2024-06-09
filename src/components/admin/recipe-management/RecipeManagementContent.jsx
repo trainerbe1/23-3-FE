@@ -1,15 +1,18 @@
-import { faAdd, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { deleteUser, getUsers } from '../../../services/user_service';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactPaginate from "react-paginate";
-import { DateTime } from "luxon";
 import { toast } from "react-toastify";
-import { getRecipes } from "../../../services/recipe_service";
+import { getRecipes, deleteRecipeById } from "../../../services/recipe_service";
+import ReactModal from "react-modal";
+import themes from "../../../common/theme";
+import Confirm from "../../Confirm";
 
 function RecipeManagementContent() {
   const [recipes, setRecipes] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
+  const selectedRecipe = useRef({});
 
   useEffect(() => {
     getRecipesData();
@@ -25,18 +28,43 @@ function RecipeManagementContent() {
     setTotalPage(data.data.totalPages);
   }
 
-  async function deleteUserHandler(r) {
-    await deleteUser(r.id);
-    getRecipesData();
-    toast.success('User deleted successfully');
+  async function deleteRecipeHandler() {
+    await deleteRecipeById(selectedRecipe.current.id);
+    const filteredRecipes = recipes.filter(r => r.id != selectedRecipe.current.id);
+    
+    if(filteredRecipes.length === 0) {
+      window.location.reload();
+      return;
+    }
+
+    setRecipes(filteredRecipes);
+    closeModal();
+    toast.success('Recipe deleted successfully');
+  }
+
+  async function confirmDelete(r) {
+    setOpenModal(true);
+    selectedRecipe.current = r;
+  }
+
+  function closeModal() {
+    setOpenModal(false);
   }
 
   return (
     <div>
+      <ReactModal 
+        isOpen={openModal}
+        style={themes.modalStyle}
+        onRequestClose={closeModal}
+        contentLabel="Example Modal"
+      >
+        <Confirm title={'Delete this recipe?'} cancelHandler={closeModal} confirmHandler={() => deleteRecipeHandler()} />
+      </ReactModal>
+
       <div className="p-3 dark:bg-gray-800 bg-white shadow-lg text-center text-white font-semibold sticky">
         Recipes Management
       </div>
-
 
       <div className="p-6">
         <div className="mb-6">
@@ -99,7 +127,7 @@ function RecipeManagementContent() {
                             {r.instructions.split('\n').length}
                           </td>
                           <td className="px-6 py-4">
-                            <button type="button" onClick={() => deleteUserHandler(u)} className="text-blue-400 hover:text-blue-600">
+                            <button type="button" onClick={() => confirmDelete(r)} className="text-blue-400 hover:text-blue-600">
                               Delete
                             </button>
                           </td>
