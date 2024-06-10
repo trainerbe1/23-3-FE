@@ -112,7 +112,7 @@ function ShoppingListContent() {
         <div className="p-3 dark:bg-gray-800 bg-white shadow-lg text-center text-white font-semibold sticky">
           {
             todos.length === 0 
-              ? <>Shopping List</>
+              ? <>Items</>
               : <>{selectedList.name} ({progress}%)</>
           }
           
@@ -145,7 +145,7 @@ function ShoppingListContent() {
       </div>
       <div className="w-1/3 h-screen border-l">
         <div className="p-3 dark:bg-gray-800 bg-white shadow-lg text-center text-white font-semibold sticky">
-          Lists
+          Shopping Lists
         </div>
         <div className="p-3">
           {

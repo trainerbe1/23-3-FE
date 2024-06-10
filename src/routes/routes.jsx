@@ -2,6 +2,7 @@ import app from "../common/app";
 
 const routes = {
     main: app.baseUrl,
+    register: "/register",
     home: "/home",
     shoppingList: "/shopping-list",
     mealPlanner: "/meal-planner",
@@ -12,6 +13,8 @@ const routes = {
     },
     
     userManagement: "/user-management",
+    
+    createRecipe: "/recipe-management/create",
     recipeManagement: "/recipe-management",
 
     logout: "/logout",

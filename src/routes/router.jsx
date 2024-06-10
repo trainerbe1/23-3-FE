@@ -10,11 +10,17 @@ import LogoutView from "../views/LogoutView";
 import RecipeManagementView from "../views/RecipeManagementView";
 import UserManagementView from "../views/UserManagementView";
 import RecipeDetailView from "../views/RecipeDetailView";
+import CreateRecipeView from "../views/CreateRecipeView";
+import RegisterView from "../views/RegisterView";
 
 const router = createBrowserRouter([
     {
         path: routes.main,
         element: <AuthView />
+    },
+    {
+        path: routes.register,
+        element: <RegisterView />
     },
     {
         path: routes.home,
@@ -48,6 +54,10 @@ const router = createBrowserRouter([
     {
         path: routes.recipeManagement,
         element: <RecipeManagementView />
+    },
+    {
+        path: routes.createRecipe,
+        element: <CreateRecipeView />
     },
 
     {

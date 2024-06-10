@@ -7,6 +7,7 @@ import { getRecipes, deleteRecipeById } from "../../../services/recipe_service";
 import ReactModal from "react-modal";
 import themes from "../../../common/theme";
 import Confirm from "../../Confirm";
+import routes from "../../../routes/routes";
 
 function RecipeManagementContent() {
   const [recipes, setRecipes] = useState([]);
@@ -63,14 +64,10 @@ function RecipeManagementContent() {
       </ReactModal>
 
       <div className="p-3 dark:bg-gray-800 bg-white shadow-lg text-center text-white font-semibold sticky">
-        Recipes Management
+        Recipes Management&emsp;<a href={routes.createRecipe} className="text-sm rounded bg-slate-800 hover:bg-gray-700 py-1 px-2"><FontAwesomeIcon icon={faAdd} /></a>
       </div>
 
       <div className="p-6">
-        <div className="mb-6">
-          <button type="button" className="text-sm rounded bg-slate-800 hover:bg-gray-700  py-1 px-3"><FontAwesomeIcon icon={faAdd} /> Add Recipe</button>
-        </div>
-
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

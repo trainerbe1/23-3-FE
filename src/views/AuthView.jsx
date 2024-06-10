@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import Logo from "../assets/png/lunch.png";
+import Logo from "../assets/svg/logo.svg";
 import BgLogin from "../assets/jpg/bg-login.jpg";
 import app from "../common/app";
 import theme from "../common/theme";
@@ -48,7 +48,7 @@ function AuthView() {
       <div className="dark:bg-gray-800 bg-white rounded p-5 z-10 w-1/4">
         <div className="mb-10 flex items-center">
           <div>
-            <img src={Logo} className="h-8 me-3" alt="Logo"/> 
+            <img src={Logo} className="h-12 me-2" alt="Logo"/> 
           </div>
           <div className="text-white text-2xl font-bold">
             {app.name}
@@ -62,11 +62,15 @@ function AuthView() {
 
             <input required type="password" className={`mt-5 mb-1 ${theme.textfield}`} placeholder="Password" ref={password} />
             <small className="text-red-500">{errors.password}</small>
+
+            <div className="my-1">
+              <a href={routes.register} className="text-blue-500 text-sm underline">Create an account</a>
+            </div>
+
             <button type="submit" className="w-full mt-8 hover:bg-slate-500 bg-slate-700 py-2 rounded text-white font-semibold">Submit</button>
           </form>
         </div>
       </div>
-
     </div>
   );
 }
